@@ -4,300 +4,488 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hackathon PS Selection Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b1020;
-      --panel: #141c33;
-      --panel-soft: #1a2543;
-      --text: #f3f7ff;
-      --muted: #9fb0d0;
-      --accent: #61dafb;
-      --danger: #ff6b6b;
-      --success: #51cf66;
-      --warning: #ffd43b;
-      --border: rgba(255, 255, 255, 0.09);
-      --disabled: rgba(255, 255, 255, 0.15);
+      --bg-dark: #030712;
+      --bg-gradient-1: #4f46e5;
+      --bg-gradient-2: #ec4899;
+      --bg-gradient-3: #06b6d4;
+      --panel-bg: rgba(17, 24, 39, 0.7);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #60a5fa;
+      --accent-hover: #3b82f6;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --card-bg: rgba(30, 41, 59, 0.6);
+      --card-hover: rgba(30, 41, 59, 0.9);
     }
 
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @keyframes gradient-bg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(97, 218, 251, 0.18), transparent 30%),
-        linear-gradient(180deg, #0b1020 0%, #070b14 100%);
-      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.15), transparent 60%),
+                  radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15), transparent 50%),
+                  radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.15), transparent 50%);
+      z-index: -1;
+      animation: gradient-bg 15s ease infinite;
+      background-size: 200% 200%;
+    }
+
+    h1, h2, h3, .eyebrow {
+      font-family: 'Outfit', sans-serif;
     }
 
     .app {
-      width: min(1040px, 100%);
-      background: rgba(20, 28, 51, 0.92);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      width: min(1100px, 100%);
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--panel-border);
+      border-radius: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
 
-    .shell {
-      padding: 36px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    h1, h2, h3, p {
-      margin: 0;
-    }
+    .shell { padding: 48px; }
+    .hidden { display: none !important; }
 
     .hero {
-      display: grid;
+      display: flex;
+      flex-direction: column;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
+      text-align: center;
+      align-items: center;
     }
 
     .eyebrow {
       color: var(--accent);
       font-size: 0.85rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
+      background: linear-gradient(to right, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .muted {
-      color: var(--muted);
+    h1, h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .register-card,
-    .confirmation-card {
-      max-width: 520px;
-      margin: 40px auto;
-      padding: 32px;
-      border-radius: 20px;
-      background: var(--panel-soft);
-      border: 1px solid var(--border);
+    .muted { color: var(--text-muted); font-size: 1.05rem; line-height: 1.5; }
+
+    .register-card, .confirmation-card {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 40px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .field {
-      display: grid;
-      gap: 10px;
-      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    
+    .field label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #cbd5e1;
     }
 
     .action-row {
       display: grid;
-      gap: 12px;
+      gap: 16px;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      margin-top: 10px;
+      margin-top: 20px;
     }
 
     input {
       width: 100%;
-      background: #0d1427;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      font-size: 1rem;
+      background: rgba(3, 7, 18, 0.5);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 18px 20px;
+      font-size: 1.1rem;
+      font-family: 'Inter', sans-serif;
       outline: none;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2), inset 0 2px 4px rgba(0,0,0,0.2);
     }
 
     button {
       border: 0;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 1rem;
-      font-weight: 700;
+      border-radius: 16px;
+      padding: 16px 24px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
       cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.55;
-      transform: none;
-    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    button:active { transform: translateY(0); }
+    button:disabled { cursor: not-allowed; opacity: 0.5; transform: none; box-shadow: none; }
 
     .primary {
-      background: var(--accent);
-      color: #04111d;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
     }
+    .primary:hover { background: linear-gradient(135deg, #2563eb, #7c3aed); }
 
     .secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--panel-border);
     }
+    .secondary:hover { background: rgba(255, 255, 255, 0.1); }
 
-    .danger {
-      background: var(--danger);
-      color: white;
-    }
+    .danger { background: var(--danger); color: white; }
+    .danger:hover { background: var(--danger-hover); }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 28px;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 20px;
+      border: 1px solid var(--panel-border);
       flex-wrap: wrap;
     }
 
+    .topbar h3 {
+      font-size: 1.5rem;
+      margin-top: 4px;
+      color: #e2e8f0;
+    }
+
     .timer {
-      padding: 14px 18px;
-      border-radius: 16px;
-      background: rgba(255, 212, 59, 0.12);
-      border: 1px solid rgba(255, 212, 59, 0.2);
-      min-width: 180px;
+      padding: 16px 24px;
+      border-radius: 18px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      min-width: 200px;
       text-align: center;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.05);
+    }
+
+    .timer strong {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      margin-top: 4px;
+      color: var(--warning);
+      text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+      font-variant-numeric: tabular-nums;
     }
 
     .topbar-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       flex-wrap: wrap;
-    }
-
-    .timer strong {
-      display: block;
-      font-size: 2rem;
-      margin-top: 4px;
     }
 
     .grid {
       display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 
-    .ps-card {
-      background: var(--panel-soft);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px;
+    .dashboard-shell {
       display: grid;
-      gap: 14px;
-      cursor: pointer;
-      min-height: 280px;
+      gap: 24px;
     }
 
-    .ps-card:hover {
-      border-color: rgba(97, 218, 251, 0.45);
-      transform: translateY(-2px);
+    .dashboard-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    .ps-card.disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      background: rgba(255, 255, 255, 0.05);
+    .summary-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
 
-    .badge {
-      justify-self: start;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(97, 218, 251, 0.14);
-      color: var(--accent);
-      font-size: 0.92rem;
-      font-weight: 700;
+    .summary-tile {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(3, 7, 18, 0.4);
+      border: 1px solid var(--panel-border);
+      display: grid;
+      gap: 8px;
     }
 
-    .full-badge {
-      background: rgba(255, 107, 107, 0.18);
-      color: #ffb0b0;
+    .summary-tile strong {
+      font-size: 2rem;
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main);
     }
 
-    .message {
-      margin-top: 16px;
+    .dashboard-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid var(--panel-border);
+      background: rgba(3, 7, 18, 0.35);
+    }
+
+    .dashboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+    }
+
+    .dashboard-table th,
+    .dashboard-table td {
       padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid transparent;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
       font-size: 0.96rem;
     }
 
+    .dashboard-table th {
+      color: #cbd5e1;
+      font-weight: 600;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .dashboard-table td {
+      color: var(--text-main);
+    }
+
+    .dashboard-section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .ps-card {
+      background: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      min-height: 320px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ps-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .ps-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(96, 165, 250, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .ps-card:hover::before { opacity: 1; }
+
+    .ps-card.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: rgba(15, 23, 42, 0.3);
+      filter: grayscale(100%);
+    }
+    .ps-card.disabled:hover { transform: none; box-shadow: none; border-color: var(--panel-border); }
+    .ps-card.disabled::before { display: none; }
+
+    .ps-card h3 { font-size: 1.4rem; margin-top: 8px; line-height: 1.3; }
+    .ps-card p { flex-grow: 1; font-size: 1rem; color: #cbd5e1; }
+
+    .badge {
+      align-self: flex-start;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .full-badge {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
     .message.error {
-      background: rgba(255, 107, 107, 0.12);
-      border-color: rgba(255, 107, 107, 0.28);
-      color: #ffbcbc;
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
     }
 
     .message.success {
-      background: rgba(81, 207, 102, 0.12);
-      border-color: rgba(81, 207, 102, 0.28);
-      color: #b7f5c1;
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
     }
 
     .meta {
       display: grid;
-      gap: 12px;
-      margin-top: 24px;
+      gap: 16px;
+      margin-top: 32px;
+      margin-bottom: 32px;
     }
 
     .meta-row {
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: #0d1427;
-      border: 1px solid var(--border);
+      padding: 18px 24px;
+      border-radius: 16px;
+      background: rgba(3, 7, 18, 0.4);
+      border: 1px solid var(--panel-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
     }
+    
+    .meta-row strong { color: #94a3b8; font-weight: 500; }
+    .meta-row span { font-weight: 600; color: #f8fafc; }
 
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(3, 6, 12, 0.72);
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
+      z-index: 100;
+      animation: fadeIn 0.2s ease;
     }
 
     .modal {
-      width: min(520px, 100%);
-      background: #10192f;
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 28px;
+      width: min(540px, 100%);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 40px;
       display: grid;
-      gap: 16px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      gap: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
     }
+    
+    .modal h3 { font-size: 1.8rem; color: var(--danger); }
+    .modal p { font-size: 1.1rem; line-height: 1.5; color: #e2e8f0; }
 
     .modal-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 12px;
     }
 
-    @media (max-width: 720px) {
-      .shell {
-        padding: 22px;
-      }
-
-      .register-card,
-      .confirmation-card {
-        padding: 24px;
-        margin: 10px auto;
-      }
-
-      .topbar {
-        align-items: stretch;
-      }
-
-      .timer {
-        width: 100%;
-      }
+    @media (max-width: 768px) {
+      .shell { padding: 32px 20px; }
+      h1, h2 { font-size: 2rem; }
+      .register-card, .confirmation-card { padding: 32px 24px; }
+      .topbar { flex-direction: column; align-items: stretch; gap: 16px; }
+      .timer { width: 100%; }
+      .topbar-actions { justify-content: center; }
+      .modal-actions { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -364,6 +552,54 @@
           </div>
         </div>
       </section>
+
+      <section id="admin-view" class="hidden">
+        <div class="dashboard-shell">
+          <div class="dashboard-card">
+            <div class="dashboard-topbar">
+              <div class="hero" style="margin-bottom: 0; align-items: flex-start; text-align: left;">
+                <span class="eyebrow">Admin Dashboard</span>
+                <h2>View all team registrations.</h2>
+                <p class="muted">Protected by the admin key and backed by the live database.</p>
+              </div>
+              <button id="admin-back-button" class="secondary">Back to Portal</button>
+            </div>
+            <div class="field">
+              <label for="admin-key">Admin Key</label>
+              <input id="admin-key" type="password" placeholder="Enter admin key" autocomplete="off">
+              <div class="action-row">
+                <button id="admin-load-button" class="primary">Load Dashboard</button>
+                <button id="admin-refresh-button" class="secondary">Refresh Data</button>
+              </div>
+            </div>
+            <div id="admin-message" class="message error hidden"></div>
+          </div>
+
+          <div id="admin-content" class="hidden">
+            <div class="dashboard-card">
+              <div class="summary-grid" id="admin-summary-grid"></div>
+            </div>
+            <div id="admin-ps-sections" class="dashboard-shell"></div>
+            <div class="dashboard-card">
+              <div class="dashboard-section-title">
+                <h3>Unselected Teams</h3>
+                <span class="muted" id="admin-unselected-count">0 teams</span>
+              </div>
+              <div class="dashboard-table-wrap">
+                <table class="dashboard-table">
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>Created At</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-unselected-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -382,8 +618,10 @@
     const REGISTER_VIEW = document.getElementById('register-view');
     const SELECT_VIEW = document.getElementById('select-view');
     const CONFIRMED_VIEW = document.getElementById('confirmed-view');
+    const ADMIN_VIEW = document.getElementById('admin-view');
     const REGISTER_MESSAGE = document.getElementById('register-message');
     const SELECTION_MESSAGE = document.getElementById('selection-message');
+    const ADMIN_MESSAGE = document.getElementById('admin-message');
     const TEAM_NAME_INPUT = document.getElementById('team-name');
     const REGISTER_BUTTON = document.getElementById('register-button');
     const ENTER_BUTTON = document.getElementById('enter-button');
@@ -398,9 +636,19 @@
     const CONFIRMED_TEAM = document.getElementById('confirmed-team');
     const CONFIRMED_PS = document.getElementById('confirmed-ps');
     const CONFIRMED_TIME = document.getElementById('confirmed-time');
+    const ADMIN_KEY_INPUT = document.getElementById('admin-key');
+    const ADMIN_LOAD_BUTTON = document.getElementById('admin-load-button');
+    const ADMIN_REFRESH_BUTTON = document.getElementById('admin-refresh-button');
+    const ADMIN_BACK_BUTTON = document.getElementById('admin-back-button');
+    const ADMIN_CONTENT = document.getElementById('admin-content');
+    const ADMIN_SUMMARY_GRID = document.getElementById('admin-summary-grid');
+    const ADMIN_PS_SECTIONS = document.getElementById('admin-ps-sections');
+    const ADMIN_UNSELECTED_BODY = document.getElementById('admin-unselected-body');
+    const ADMIN_UNSELECTED_COUNT = document.getElementById('admin-unselected-count');
     const BACK_TO_LOOKUP_SELECT = document.getElementById('back-to-lookup-select');
     const BACK_TO_LOOKUP_CONFIRMED = document.getElementById('back-to-lookup-confirmed');
     const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:3000' : '';
+    const IS_ADMIN_ROUTE = window.location.pathname === '/admin';
 
     let appState = {
       teamId: localStorage.getItem('team_id') || null,
@@ -414,7 +662,9 @@
       pollHandle: null,
       timerHandle: null,
       pendingSelection: null,
-      lockedByAdmin: false
+      lockedByAdmin: false,
+      adminKey: localStorage.getItem('admin_key') || '',
+      adminData: null
     };
 
     REGISTER_BUTTON.addEventListener('click', registerTeam);
@@ -429,10 +679,27 @@
     CONFIRM_SELECT.addEventListener('click', confirmSelection);
     BACK_TO_LOOKUP_SELECT.addEventListener('click', returnToLookup);
     BACK_TO_LOOKUP_CONFIRMED.addEventListener('click', returnToLookup);
+    ADMIN_LOAD_BUTTON.addEventListener('click', loadAdminDashboard);
+    ADMIN_REFRESH_BUTTON.addEventListener('click', loadAdminDashboard);
+    ADMIN_BACK_BUTTON.addEventListener('click', returnToPortal);
+    ADMIN_KEY_INPUT.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        loadAdminDashboard();
+      }
+    });
 
     bootstrap();
 
     async function bootstrap() {
+      if (IS_ADMIN_ROUTE) {
+        showAdmin();
+        if (appState.adminKey) {
+          ADMIN_KEY_INPUT.value = appState.adminKey;
+          await loadAdminDashboard();
+        }
+        return;
+      }
+
       if (window.location.protocol === 'file:') {
         setMessage(
           REGISTER_MESSAGE,
@@ -512,6 +779,7 @@
       REGISTER_VIEW.classList.remove('hidden');
       SELECT_VIEW.classList.add('hidden');
       CONFIRMED_VIEW.classList.add('hidden');
+      ADMIN_VIEW.classList.add('hidden');
       TEAM_NAME_INPUT.value = appState.teamName || '';
     }
 
@@ -519,6 +787,7 @@
       REGISTER_VIEW.classList.add('hidden');
       SELECT_VIEW.classList.remove('hidden');
       CONFIRMED_VIEW.classList.add('hidden');
+      ADMIN_VIEW.classList.add('hidden');
       TEAM_NAME_DISPLAY.textContent = appState.teamName;
       WELCOME_TITLE.textContent = `Choose one problem statement, ${appState.teamName}.`;
       startTimer();
@@ -530,21 +799,39 @@
       REGISTER_VIEW.classList.add('hidden');
       SELECT_VIEW.classList.add('hidden');
       CONFIRMED_VIEW.classList.remove('hidden');
+      ADMIN_VIEW.classList.add('hidden');
       CONFIRMED_TEAM.textContent = appState.teamName;
       CONFIRMED_PS.textContent = appState.selectedPsTitle || `PS ${appState.selectedPs}`;
       CONFIRMED_TIME.textContent = formatDateTime(appState.selectedAt);
     }
 
-    function startPolling() {
+    function showAdmin() {
       stopPolling();
+      REGISTER_VIEW.classList.add('hidden');
+      SELECT_VIEW.classList.add('hidden');
+      CONFIRMED_VIEW.classList.add('hidden');
+      ADMIN_VIEW.classList.remove('hidden');
+      ADMIN_KEY_INPUT.value = appState.adminKey || '';
+    }
+
+    function startPolling() {
+      stopStatementPolling();
       appState.pollHandle = setInterval(loadProblemStatements, 3000);
     }
 
     function stopPolling() {
+      stopStatementPolling();
+      stopTimer();
+    }
+
+    function stopStatementPolling() {
       if (appState.pollHandle) {
         clearInterval(appState.pollHandle);
         appState.pollHandle = null;
       }
+    }
+
+    function stopTimer() {
       if (appState.timerHandle) {
         clearInterval(appState.timerHandle);
         appState.timerHandle = null;
@@ -553,9 +840,7 @@
 
     function startTimer() {
       renderTimer();
-      if (appState.timerHandle) {
-        clearInterval(appState.timerHandle);
-      }
+      stopTimer();
       appState.timerHandle = setInterval(renderTimer, 1000);
     }
 
@@ -746,9 +1031,18 @@
       showRegister();
     }
 
+    function returnToPortal() {
+      window.location.href = '/';
+    }
+
     function setRegisterActionsDisabled(disabled) {
       REGISTER_BUTTON.disabled = disabled;
       ENTER_BUTTON.disabled = disabled;
+    }
+
+    function setAdminActionsDisabled(disabled) {
+      ADMIN_LOAD_BUTTON.disabled = disabled;
+      ADMIN_REFRESH_BUTTON.disabled = disabled;
     }
 
     function setMessage(node, message, isError) {
@@ -776,6 +1070,101 @@
           : 'Network error.';
         return { ok: false, status: 0, data: { error: message } };
       }
+    }
+
+    async function loadAdminDashboard() {
+      appState.adminKey = ADMIN_KEY_INPUT.value.trim();
+      localStorage.setItem('admin_key', appState.adminKey);
+      setMessage(ADMIN_MESSAGE, '', false);
+      setAdminActionsDisabled(true);
+
+      const response = await fetchJson('/api/admin/dashboard', {
+        headers: {
+          'x-admin-key': appState.adminKey
+        }
+      });
+
+      setAdminActionsDisabled(false);
+
+      if (!response.ok) {
+        ADMIN_CONTENT.classList.add('hidden');
+        setMessage(ADMIN_MESSAGE, response.data.error || 'Could not load dashboard.', true);
+        return;
+      }
+
+      appState.adminData = response.data;
+      renderAdminDashboard(response.data);
+      setMessage(ADMIN_MESSAGE, 'Dashboard loaded from the live database.', false);
+    }
+
+    function renderAdminDashboard(data) {
+      ADMIN_CONTENT.classList.remove('hidden');
+      ADMIN_SUMMARY_GRID.innerHTML = `
+        <div class="summary-tile">
+          <span class="muted">Registered Teams</span>
+          <strong>${countRegisteredTeams(data)}</strong>
+        </div>
+        <div class="summary-tile">
+          <span class="muted">Unselected Teams</span>
+          <strong>${data.unselected_teams.length}</strong>
+        </div>
+        <div class="summary-tile">
+          <span class="muted">Selection Window</span>
+          <strong>${data.registration_window_minutes}m</strong>
+        </div>
+        <div class="summary-tile">
+          <span class="muted">Lockdown Mode</span>
+          <strong>${data.lockdown_mode ? 'On' : 'Off'}</strong>
+        </div>
+      `;
+
+      ADMIN_PS_SECTIONS.innerHTML = data.problem_statements.map((ps) => `
+        <div class="dashboard-card">
+          <div class="dashboard-section-title">
+            <div>
+              <h3>${escapeHtml(ps.title)}</h3>
+              <p class="muted">${escapeHtml(ps.description)}</p>
+            </div>
+            <span class="badge">${ps.filled_slots}/${ps.max_slots} filled</span>
+          </div>
+          <div class="dashboard-table-wrap">
+            <table class="dashboard-table">
+              <thead>
+                <tr>
+                  <th>Team</th>
+                  <th>Registered At</th>
+                  <th>Selected At</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${ps.teams.length
+                  ? ps.teams.map((team) => `
+                    <tr>
+                      <td>${escapeHtml(team.team_name)}</td>
+                      <td>${escapeHtml(formatDateTime(team.created_at))}</td>
+                      <td>${escapeHtml(formatDateTime(team.selected_at))}</td>
+                    </tr>
+                  `).join('')
+                  : '<tr><td colspan="3" class="muted">No teams selected this problem statement yet.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `).join('');
+
+      ADMIN_UNSELECTED_COUNT.textContent = `${data.unselected_teams.length} team${data.unselected_teams.length === 1 ? '' : 's'}`;
+      ADMIN_UNSELECTED_BODY.innerHTML = data.unselected_teams.length
+        ? data.unselected_teams.map((team) => `
+          <tr>
+            <td>${escapeHtml(team.team_name)}</td>
+            <td>${escapeHtml(formatDateTime(team.created_at))}</td>
+          </tr>
+        `).join('')
+        : '<tr><td colspan="2" class="muted">No unselected teams.</td></tr>';
+    }
+
+    function countRegisteredTeams(data) {
+      return data.problem_statements.reduce((sum, ps) => sum + ps.teams.length, 0) + data.unselected_teams.length;
     }
 
     function formatDateTime(value) {

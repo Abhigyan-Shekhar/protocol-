@@ -17,6 +17,7 @@ const DB_PATH = process.env.DATABASE_PATH || path.join(__dirname, 'data.sqlite')
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const DB_DIR = path.join(__dirname, 'db');
 
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new DatabaseSync(DB_PATH);
 db.exec('PRAGMA foreign_keys = ON;');
 db.exec('PRAGMA journal_mode = WAL;');
@@ -34,7 +35,7 @@ const server = http.createServer(async (req, res) => {
       return send(res, 204);
     }
 
-    if (url.pathname === '/' && req.method === 'GET') {
+    if ((url.pathname === '/' || url.pathname === '/admin') && req.method === 'GET') {
       return serveFile(res, path.join(PUBLIC_DIR, 'index.html'), 'text/html; charset=utf-8');
     }
 
@@ -52,6 +53,10 @@ const server = http.createServer(async (req, res) => {
 
     if (url.pathname === '/api/problem-statements' && req.method === 'GET') {
       return handleProblemStatements(res);
+    }
+
+    if (url.pathname === '/healthz' && req.method === 'GET') {
+      return handleHealthCheck(res);
     }
 
     if (url.pathname === '/api/select' && req.method === 'POST') {
@@ -188,6 +193,14 @@ function handleProblemStatements(res) {
   `).all();
 
   return sendJson(res, 200, { problem_statements: statements, lockdown_mode: LOCKDOWN_MODE });
+}
+
+function handleHealthCheck(res) {
+  const statementCount = db.prepare('SELECT COUNT(*) AS count FROM problem_statements').get().count;
+  return sendJson(res, 200, {
+    ok: true,
+    problem_statement_count: statementCount
+  });
 }
 
 async function handleSelect(req, res) {

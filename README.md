@@ -31,7 +31,16 @@ Important:
 
 - Render web services must bind to `0.0.0.0` and use the provided `PORT`.
 - SQLite must live on persistent storage, so the app uses `DATABASE_PATH=/data/data.sqlite` on Render.
+- Render health checks now use `GET /healthz`.
 - Set `ADMIN_KEY` in Render before going live.
+
+### Deploy steps
+
+1. Push this repo to GitHub.
+2. In Render, create a new Blueprint and select this repository.
+3. Keep the persistent disk mount at `/data` so SQLite survives redeploys.
+4. Set the secret `ADMIN_KEY` in Render before the first production use.
+5. Deploy the Blueprint. Render will build from `Dockerfile` and use `render.yaml`.
 
 ## Docker deploy
 
