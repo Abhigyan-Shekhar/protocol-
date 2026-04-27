@@ -1,0 +1,21 @@
+services:
+  - name: hackathon-ps-portal
+    type: web
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_PATH
+        value: /data/data.sqlite
+      - key: LOCKDOWN_MODE
+        value: "false"
+      - key: ALLOW_ORIGIN
+        value: "*"
+      - key: ADMIN_KEY
+        sync: false
+    disk:
+      name: hackathon-portal-data
+      mountPath: /data
+      sizeGB: 1

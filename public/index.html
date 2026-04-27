@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackathon PS Selection Portal</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #141c33;
+      --panel-soft: #1a2543;
+      --text: #f3f7ff;
+      --muted: #9fb0d0;
+      --accent: #61dafb;
+      --danger: #ff6b6b;
+      --success: #51cf66;
+      --warning: #ffd43b;
+      --border: rgba(255, 255, 255, 0.09);
+      --disabled: rgba(255, 255, 255, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(97, 218, 251, 0.18), transparent 30%),
+        linear-gradient(180deg, #0b1020 0%, #070b14 100%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(1040px, 100%);
+      background: rgba(20, 28, 51, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+
+    .shell {
+      padding: 36px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    .hero {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .register-card,
+    .confirmation-card {
+      max-width: 520px;
+      margin: 40px auto;
+      padding: 32px;
+      border-radius: 20px;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+    }
+
+    .field {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .action-row {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      background: #0d1427;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #04111d;
+    }
+
+    .secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .timer {
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(255, 212, 59, 0.12);
+      border: 1px solid rgba(255, 212, 59, 0.2);
+      min-width: 180px;
+      text-align: center;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timer strong {
+      display: block;
+      font-size: 2rem;
+      margin-top: 4px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .ps-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+      cursor: pointer;
+      min-height: 280px;
+    }
+
+    .ps-card:hover {
+      border-color: rgba(97, 218, 251, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .ps-card.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .badge {
+      justify-self: start;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(97, 218, 251, 0.14);
+      color: var(--accent);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .full-badge {
+      background: rgba(255, 107, 107, 0.18);
+      color: #ffb0b0;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      font-size: 0.96rem;
+    }
+
+    .message.error {
+      background: rgba(255, 107, 107, 0.12);
+      border-color: rgba(255, 107, 107, 0.28);
+      color: #ffbcbc;
+    }
+
+    .message.success {
+      background: rgba(81, 207, 102, 0.12);
+      border-color: rgba(81, 207, 102, 0.28);
+      color: #b7f5c1;
+    }
+
+    .meta {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .meta-row {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #0d1427;
+      border: 1px solid var(--border);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 6, 12, 0.72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal {
+      width: min(520px, 100%);
+      background: #10192f;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 28px;
+      display: grid;
+      gap: 16px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        padding: 22px;
+      }
+
+      .register-card,
+      .confirmation-card {
+        padding: 24px;
+        margin: 10px auto;
+      }
+
+      .topbar {
+        align-items: stretch;
+      }
+
+      .timer {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="shell">
+      <section id="register-view">
+        <div class="register-card">
+          <div class="hero">
+            <span class="eyebrow">Hackathon Portal</span>
+            <h1>Lock your team to one problem statement.</h1>
+            <p class="muted">Register once, pick once, and the selection becomes permanent.</p>
+          </div>
+          <div class="field">
+            <label for="team-name">Team Name</label>
+            <input id="team-name" maxlength="100" placeholder="Enter your team name" autocomplete="off">
+            <div class="action-row">
+              <button id="register-button" class="primary">Register New Team</button>
+              <button id="enter-button" class="secondary">Enter Existing Team</button>
+            </div>
+          </div>
+          <div id="register-message" class="message error hidden"></div>
+        </div>
+      </section>
+
+      <section id="select-view" class="hidden">
+        <div class="hero">
+          <span class="eyebrow">Selection Window</span>
+          <h2 id="welcome-title">Choose your problem statement.</h2>
+          <p class="muted">One choice only. When you confirm, the selection is locked forever.</p>
+        </div>
+        <div class="topbar">
+          <div>
+            <p class="muted">Registered team</p>
+            <h3 id="team-name-display">-</h3>
+          </div>
+          <div class="topbar-actions">
+            <button id="back-to-lookup-select" class="secondary">Back to Team Lookup</button>
+            <div class="timer">
+              <span class="muted">Time remaining</span>
+              <strong id="countdown">10:00</strong>
+            </div>
+          </div>
+        </div>
+        <div id="selection-message" class="message error hidden"></div>
+        <div id="ps-grid" class="grid"></div>
+      </section>
+
+      <section id="confirmed-view" class="hidden">
+        <div class="confirmation-card">
+          <div class="hero">
+            <span class="eyebrow">Selection Locked</span>
+            <h2>✅ Locked In</h2>
+            <p class="muted">This choice is now permanent.</p>
+          </div>
+          <div class="meta">
+            <div class="meta-row"><strong>Team:</strong> <span id="confirmed-team">-</span></div>
+            <div class="meta-row"><strong>Problem Statement:</strong> <span id="confirmed-ps">-</span></div>
+            <div class="meta-row"><strong>Locked At:</strong> <span id="confirmed-time">-</span></div>
+          </div>
+          <div id="confirmed-message" class="message success">Your selection has been saved.</div>
+          <div class="action-row">
+            <button id="back-to-lookup-confirmed" class="secondary">Enter Another Team</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="modal-backdrop" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3>Are you sure? This is PERMANENT.</h3>
+      <p id="modal-text" class="muted"></p>
+      <div class="modal-actions">
+        <button id="cancel-select" class="secondary">Cancel</button>
+        <button id="confirm-select" class="danger">Confirm Selection</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const REGISTER_VIEW = document.getElementById('register-view');
+    const SELECT_VIEW = document.getElementById('select-view');
+    const CONFIRMED_VIEW = document.getElementById('confirmed-view');
+    const REGISTER_MESSAGE = document.getElementById('register-message');
+    const SELECTION_MESSAGE = document.getElementById('selection-message');
+    const TEAM_NAME_INPUT = document.getElementById('team-name');
+    const REGISTER_BUTTON = document.getElementById('register-button');
+    const ENTER_BUTTON = document.getElementById('enter-button');
+    const TEAM_NAME_DISPLAY = document.getElementById('team-name-display');
+    const COUNTDOWN = document.getElementById('countdown');
+    const PS_GRID = document.getElementById('ps-grid');
+    const WELCOME_TITLE = document.getElementById('welcome-title');
+    const MODAL_BACKDROP = document.getElementById('modal-backdrop');
+    const MODAL_TEXT = document.getElementById('modal-text');
+    const CONFIRM_SELECT = document.getElementById('confirm-select');
+    const CANCEL_SELECT = document.getElementById('cancel-select');
+    const CONFIRMED_TEAM = document.getElementById('confirmed-team');
+    const CONFIRMED_PS = document.getElementById('confirmed-ps');
+    const CONFIRMED_TIME = document.getElementById('confirmed-time');
+    const BACK_TO_LOOKUP_SELECT = document.getElementById('back-to-lookup-select');
+    const BACK_TO_LOOKUP_CONFIRMED = document.getElementById('back-to-lookup-confirmed');
+    const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:3000' : '';
+
+    let appState = {
+      teamId: localStorage.getItem('team_id') || null,
+      sessionToken: localStorage.getItem('session_token') || null,
+      teamName: localStorage.getItem('team_name') || '',
+      createdAt: localStorage.getItem('created_at') || null,
+      selectedPs: null,
+      selectedPsTitle: null,
+      selectedAt: null,
+      expiresAt: null,
+      pollHandle: null,
+      timerHandle: null,
+      pendingSelection: null,
+      lockedByAdmin: false
+    };
+
+    REGISTER_BUTTON.addEventListener('click', registerTeam);
+    ENTER_BUTTON.addEventListener('click', enterExistingTeam);
+    TEAM_NAME_INPUT.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        enterExistingTeam();
+      }
+    });
+
+    CANCEL_SELECT.addEventListener('click', closeModal);
+    CONFIRM_SELECT.addEventListener('click', confirmSelection);
+    BACK_TO_LOOKUP_SELECT.addEventListener('click', returnToLookup);
+    BACK_TO_LOOKUP_CONFIRMED.addEventListener('click', returnToLookup);
+
+    bootstrap();
+
+    async function bootstrap() {
+      if (window.location.protocol === 'file:') {
+        setMessage(
+          REGISTER_MESSAGE,
+          'This page is opened from the file system. Backend requests will be sent to http://127.0.0.1:3000. Start the server with "node server.js" if it is not already running.',
+          false
+        );
+      }
+
+      if (!appState.teamId) {
+        showRegister();
+        return;
+      }
+
+      const status = await fetchJson(`/api/status/${appState.teamId}`);
+      if (!status.ok) {
+        clearSession();
+        showRegister();
+        return;
+      }
+
+      hydrateFromStatus(status.data);
+      if (appState.selectedPs) {
+        showConfirmed();
+      } else {
+        showSelect();
+        await loadProblemStatements();
+      }
+    }
+
+    async function registerTeam() {
+      setMessage(REGISTER_MESSAGE, '', false);
+      setRegisterActionsDisabled(true);
+
+      const response = await fetchJson('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ team_name: TEAM_NAME_INPUT.value })
+      });
+
+      setRegisterActionsDisabled(false);
+
+      if (!response.ok) {
+        const fallback = response.status === 409
+          ? 'Team name already exists. Use "Enter Existing Team" instead.'
+          : 'Registration failed.';
+        setMessage(REGISTER_MESSAGE, response.data.error || fallback, true);
+        return;
+      }
+
+      applyTeamEntry(response.data);
+      await continueFromEntry();
+    }
+
+    async function enterExistingTeam() {
+      setMessage(REGISTER_MESSAGE, '', false);
+      setRegisterActionsDisabled(true);
+
+      const response = await fetchJson('/api/enter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ team_name: TEAM_NAME_INPUT.value })
+      });
+
+      setRegisterActionsDisabled(false);
+
+      if (!response.ok) {
+        setMessage(REGISTER_MESSAGE, response.data.error || 'Team lookup failed.', true);
+        return;
+      }
+
+      applyTeamEntry(response.data);
+      await continueFromEntry();
+    }
+
+    function showRegister() {
+      stopPolling();
+      REGISTER_VIEW.classList.remove('hidden');
+      SELECT_VIEW.classList.add('hidden');
+      CONFIRMED_VIEW.classList.add('hidden');
+      TEAM_NAME_INPUT.value = appState.teamName || '';
+    }
+
+    function showSelect() {
+      REGISTER_VIEW.classList.add('hidden');
+      SELECT_VIEW.classList.remove('hidden');
+      CONFIRMED_VIEW.classList.add('hidden');
+      TEAM_NAME_DISPLAY.textContent = appState.teamName;
+      WELCOME_TITLE.textContent = `Choose one problem statement, ${appState.teamName}.`;
+      startTimer();
+      startPolling();
+    }
+
+    function showConfirmed() {
+      stopPolling();
+      REGISTER_VIEW.classList.add('hidden');
+      SELECT_VIEW.classList.add('hidden');
+      CONFIRMED_VIEW.classList.remove('hidden');
+      CONFIRMED_TEAM.textContent = appState.teamName;
+      CONFIRMED_PS.textContent = appState.selectedPsTitle || `PS ${appState.selectedPs}`;
+      CONFIRMED_TIME.textContent = formatDateTime(appState.selectedAt);
+    }
+
+    function startPolling() {
+      stopPolling();
+      appState.pollHandle = setInterval(loadProblemStatements, 3000);
+    }
+
+    function stopPolling() {
+      if (appState.pollHandle) {
+        clearInterval(appState.pollHandle);
+        appState.pollHandle = null;
+      }
+      if (appState.timerHandle) {
+        clearInterval(appState.timerHandle);
+        appState.timerHandle = null;
+      }
+    }
+
+    function startTimer() {
+      renderTimer();
+      if (appState.timerHandle) {
+        clearInterval(appState.timerHandle);
+      }
+      appState.timerHandle = setInterval(renderTimer, 1000);
+    }
+
+    function renderTimer() {
+      if (!appState.expiresAt) {
+        COUNTDOWN.textContent = '10:00';
+        return;
+      }
+
+      const remaining = Math.max(0, new Date(appState.expiresAt).getTime() - Date.now());
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      COUNTDOWN.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      if (remaining === 0) {
+        setMessage(SELECTION_MESSAGE, "Time's up. Your 10-minute selection window has expired.", true);
+        renderProblemStatements(appState.lastStatements || []);
+      }
+    }
+
+    async function loadProblemStatements() {
+      const response = await fetchJson('/api/problem-statements');
+      if (!response.ok) {
+        setMessage(SELECTION_MESSAGE, response.data.error || 'Could not load problem statements.', true);
+        return;
+      }
+
+      appState.lockedByAdmin = Boolean(response.data.lockdown_mode);
+      appState.lastStatements = response.data.problem_statements;
+      renderProblemStatements(response.data.problem_statements);
+    }
+
+    function renderProblemStatements(statements) {
+      const expired = isExpired();
+      PS_GRID.innerHTML = '';
+
+      if (appState.lockedByAdmin) {
+        setMessage(SELECTION_MESSAGE, 'Selections are currently locked by admin.', true);
+      } else if (!expired) {
+        setMessage(SELECTION_MESSAGE, '', false);
+      }
+
+      for (const statement of statements) {
+        const full = statement.remaining_slots <= 0;
+        const disabled = full || expired || appState.lockedByAdmin;
+        const card = document.createElement('article');
+        card.className = `ps-card${disabled ? ' disabled' : ''}`;
+        card.innerHTML = `
+          <span class="badge ${full ? 'full-badge' : ''}">
+            ${full ? 'Full' : `${statement.remaining_slots}/${statement.max_slots} slots left`}
+          </span>
+          <h3>${escapeHtml(statement.title)}</h3>
+          <p class="muted">${escapeHtml(statement.description)}</p>
+          <p><strong>PS ${statement.id}</strong></p>
+        `;
+
+        if (!disabled) {
+          card.addEventListener('click', () => openModal(statement));
+        }
+
+        PS_GRID.appendChild(card);
+      }
+    }
+
+    function openModal(statement) {
+      appState.pendingSelection = statement;
+      MODAL_TEXT.textContent = `You are about to lock ${appState.teamName} to "${statement.title}". This action cannot be undone.`;
+      MODAL_BACKDROP.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      appState.pendingSelection = null;
+      MODAL_BACKDROP.classList.add('hidden');
+    }
+
+    async function confirmSelection() {
+      if (!appState.pendingSelection) {
+        return;
+      }
+
+      CONFIRM_SELECT.disabled = true;
+      const response = await fetchJson('/api/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          team_id: Number(appState.teamId),
+          ps_id: appState.pendingSelection.id
+        })
+      });
+      CONFIRM_SELECT.disabled = false;
+
+      if (!response.ok) {
+        closeModal();
+        setMessage(SELECTION_MESSAGE, response.data.error || 'Selection failed.', true);
+        if (response.status === 403 || response.status === 409) {
+          await bootstrap();
+        }
+        return;
+      }
+
+      hydrateConfirmation(response.data.confirmation);
+      persistSession();
+      closeModal();
+      showConfirmed();
+    }
+
+    function hydrateFromStatus(status) {
+      appState.teamId = String(status.team_id);
+      appState.teamName = status.team_name;
+      appState.createdAt = status.created_at;
+      appState.expiresAt = status.expires_at;
+      appState.selectedPs = status.selected_ps;
+      appState.selectedPsTitle = status.selected_ps_title;
+      appState.selectedAt = status.selected_at;
+      appState.lockedByAdmin = Boolean(status.lockdown_mode);
+      persistSession();
+    }
+
+    function applyTeamEntry(entry) {
+      appState.teamId = String(entry.team_id);
+      appState.sessionToken = entry.session_token || null;
+      appState.teamName = entry.team_name;
+      appState.createdAt = entry.created_at;
+      appState.expiresAt = entry.expires_at;
+      appState.selectedPs = entry.selected_ps ?? null;
+      appState.selectedAt = entry.selected_at ?? null;
+      persistSession();
+    }
+
+    function hydrateConfirmation(confirmation) {
+      appState.selectedPs = confirmation.ps_id;
+      appState.selectedPsTitle = confirmation.ps_title;
+      appState.selectedAt = confirmation.selected_at;
+    }
+
+    async function continueFromEntry() {
+      const status = await fetchJson(`/api/status/${appState.teamId}`);
+      if (!status.ok) {
+        clearSession();
+        setMessage(REGISTER_MESSAGE, status.data.error || 'Could not load team status.', true);
+        showRegister();
+        return;
+      }
+
+      hydrateFromStatus(status.data);
+      if (appState.selectedPs) {
+        showConfirmed();
+      } else {
+        showSelect();
+        await loadProblemStatements();
+      }
+    }
+
+    function isExpired() {
+      return !appState.expiresAt || Date.now() >= new Date(appState.expiresAt).getTime();
+    }
+
+    function persistSession() {
+      localStorage.setItem('team_id', appState.teamId || '');
+      localStorage.setItem('session_token', appState.sessionToken || '');
+      localStorage.setItem('team_name', appState.teamName || '');
+      localStorage.setItem('created_at', appState.createdAt || '');
+    }
+
+    function clearSession() {
+      localStorage.removeItem('team_id');
+      localStorage.removeItem('session_token');
+      localStorage.removeItem('team_name');
+      localStorage.removeItem('created_at');
+      appState.teamId = null;
+      appState.sessionToken = null;
+      appState.teamName = '';
+      appState.createdAt = null;
+      appState.expiresAt = null;
+      appState.selectedPs = null;
+      appState.selectedPsTitle = null;
+      appState.selectedAt = null;
+      appState.lastStatements = null;
+      appState.lockedByAdmin = false;
+      appState.pendingSelection = null;
+    }
+
+    function returnToLookup() {
+      closeModal();
+      clearSession();
+      setMessage(SELECTION_MESSAGE, '', false);
+      TEAM_NAME_INPUT.value = '';
+      showRegister();
+    }
+
+    function setRegisterActionsDisabled(disabled) {
+      REGISTER_BUTTON.disabled = disabled;
+      ENTER_BUTTON.disabled = disabled;
+    }
+
+    function setMessage(node, message, isError) {
+      if (!message) {
+        node.classList.add('hidden');
+        node.textContent = '';
+        node.classList.remove('error', 'success');
+        return;
+      }
+
+      node.textContent = message;
+      node.classList.remove('hidden');
+      node.classList.toggle('error', Boolean(isError));
+      node.classList.toggle('success', !isError);
+    }
+
+    async function fetchJson(url, options = {}) {
+      try {
+        const response = await fetch(`${API_BASE}${url}`, options);
+        const data = await response.json().catch(() => ({}));
+        return { ok: response.ok, status: response.status, data };
+      } catch {
+        const message = window.location.protocol === 'file:'
+          ? 'Cannot reach the backend at http://127.0.0.1:3000. Start the server with "node server.js" and open the app from that address.'
+          : 'Network error.';
+        return { ok: false, status: 0, data: { error: message } };
+      }
+    }
+
+    function formatDateTime(value) {
+      if (!value) {
+        return '-';
+      }
+      return new Date(value).toLocaleString();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+  </script>
+</body>
+</html>

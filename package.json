@@ -1,0 +1,9 @@
+{
+  "name": "hackathon-ps-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack hackathon problem statement selection portal",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

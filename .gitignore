@@ -1,0 +1,6 @@
+data.sqlite
+data.sqlite-shm
+data.sqlite-wal
+portal-data/
+node_modules/
+.DS_Store
